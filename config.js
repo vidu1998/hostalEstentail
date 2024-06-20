@@ -4,13 +4,12 @@ import "firebase/compat/auth";
 import "firebase/compat/firestore";
 
 const firebaseConfig={
-    apiKey: "AIzaSyDkUyayB4IELPXtUeCqkY5dRPiND9RjnZE",
-    authDomain: "hostal-636e6.firebaseapp.com",
-    projectId: "hostal-636e6",
-    storageBucket: "hostal-636e6.appspot.com",
-    messagingSenderId: "275298872523",
-    appId: "1:275298872523:web:dc0cef6f7ade221e083f4e",
-    measurementId: "G-EMDTF10MZE"
+  apiKey: "AIzaSyC6PmnT2_QKv4Gl1xqMRKeYAGaV6FiMSV8",
+  authDomain: "hostal-app-5aa90.firebaseapp.com",
+  projectId: "hostal-app-5aa90",
+  storageBucket: "hostal-app-5aa90.appspot.com",
+  messagingSenderId: "984452009960",
+  appId: "1:984452009960:web:1d32d6701f11fada05de5d"
 }
 
 if (!firebase.apps.length) {

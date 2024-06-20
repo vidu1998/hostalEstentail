@@ -4,12 +4,12 @@
     "slug": "HostalEssential",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/hostal.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/aa.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2508b3"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -19,7 +19,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/hostal.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.bawanie007.HostalEssential"
@@ -29,7 +29,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "d29551a0-deb0-44b9-91fe-7a1073999d81"
+        "projectId": "cce9f8f0-b4e2-446d-af41-668879af2fe1"
       }
     }
   }

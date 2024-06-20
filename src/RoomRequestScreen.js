@@ -73,11 +73,11 @@ const RoomRequestScreen = () => {
       Alert.alert('Error', 'Failed to send room request: ' + error.message);
     }
   };
+
   const renderRoomItem = ({ item }) => (
     <TouchableOpacity
       style={styles.roomItem}
       onPress={() => {
-       
         setRoomId(item.id);
         setRoomName(item.name);
       }}
@@ -113,8 +113,12 @@ const RoomRequestScreen = () => {
           onChangeText={text => setRoomName(text)}
           editable={false}
         />
-        <TouchableOpacity style={styles.addButton} onPress={requestRoom}>
-          <Text>Request Room</Text>
+        <TouchableOpacity
+          style={[styles.addButton, (roomId && roomName) ? {} : styles.disabledButton]}
+          onPress={requestRoom}
+          disabled={!roomId || !roomName}
+        >
+          <Text style={(roomId && roomName) ? styles.buttonText : styles.disabledButtonText}>Request Room</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -146,6 +150,15 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     borderRadius: 5,
+  },
+  disabledButton: {
+    backgroundColor: '#ccc',
+  },
+  buttonText: {
+    color: '#fff',
+  },
+  disabledButtonText: {
+    color: '#888',
   },
   roomList: {
     width: '100%',

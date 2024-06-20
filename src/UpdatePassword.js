@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 import { firebase } from '../config'
+import { useNavigation } from '@react-navigation/native';
+import Background from './components/Background';
+import BackButton from './components/BackButton';
 
 
 const UpdatePassword = () => {
+  const Navigation = useNavigation();
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -44,7 +48,8 @@ const UpdatePassword = () => {
     };
 
   return (
-        <View style={styles.container}>
+    <Background>
+            <BackButton goBack={Navigation.goBack} />
       <Text style={styles.heading}>Update Password</Text>
       <TextInput
         style={styles.input}
@@ -70,8 +75,8 @@ const UpdatePassword = () => {
       <Button title="Update Password" onPress={handleSubmit} />
       {error && <Text style={styles.error}>{error}</Text>}
       {success && <Text style={styles.success}>Password updated successfully!</Text>}
-    </View>
 
+   </Background>
   )
 }
 
@@ -105,4 +110,4 @@ const styles = StyleSheet.create({
       color: 'green',
       marginTop: 10,
     },
-  });
+  }); 

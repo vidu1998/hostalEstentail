@@ -1,12 +1,23 @@
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native'
-import { firebase } from '../config'
+import React, { useState } from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, TextInput, Button } from 'react-native-paper'; // Assuming Text and Button are from react-native-paper
+import Background from './components/Background';
+import Logo from './components/Logo';
+import Header from './components/Header';
+import BackButton from './components/BackButton';
+import { theme } from './core/theme';
+import { useNavigation } from '@react-navigation/native';
+import { firebase } from '../config';
 
 const Login = () => {
   const Navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
+
+  const togglePasswordVisibility = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
 
   const loginUser = async (email, password) => {
     try {
@@ -27,72 +38,94 @@ const Login = () => {
     } catch (error) {
       alert(error.message);
     }
-  }
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={{ fontWeight: 'bold', fontSize: 26 }}>Login</Text>
-      <View style={{ marginTop: 40 }}>
+    <Background>
+      <BackButton goBack={Navigation.goBack} />
+      <Logo />
+      <Header>Hostal Essential Login</Header>
+      <TextInput
+        label="Email"
+        value={email}
+        onChangeText={(email) => setEmail(email)}
+        autoCapitalize="none"
+        autoCompleteType="email"
+        textContentType="emailAddress"
+        keyboardType="email-address"
+        style={[styles.input, styles.emailInput]} // Add styles.emailInput to customize email input separately if needed
+      />
+      <View style={styles.passwordContainer}>
         <TextInput
-          style={styles.textInput}
-          placeholder='Email'
-          onChangeText={(email) => setEmail(email)}
-          autoCapitalize='none'
-          autoCorrect={false}
-        ></TextInput>
-
-        <TextInput
-          style={styles.textInput}
-          placeholder='Password'
+          label="Password"
+          returnKeyType="done"
+          value={password}
           onChangeText={(password) => setPassword(password)}
-          autoCapitalize='none'
-          autoCorrect={false}
-          secureTextEntry={true}
-        ></TextInput>
+          secureTextEntry={secureTextEntry}
+          style={[styles.input, styles.passwordInput]} // Add styles.passwordInput to customize password input separately if needed
+        />
+        <TouchableOpacity
+          style={styles.iconButton}
+          onPress={togglePasswordVisibility}
+        >
+          <Text style={styles.icon}>{secureTextEntry ? '👁️' : '🔒'}</Text>
+        </TouchableOpacity>
       </View>
-
-      <TouchableOpacity
-        onPress={() => loginUser(email, password)}
-        style={styles.button}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 22 }}>Login</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => Navigation.navigate('Registration')}
-        style={{ marginTop: 20 }}
-      >
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>Don't have an account? Register Now</Text>
-      </TouchableOpacity>
-    </View>
-  )
-}
-
-export default Login
+      <Button mode="contained" onPress={() => loginUser(email, password)} style={styles.button}>
+        Log in
+      </Button>
+      <View style={styles.row}>
+        <Text>You do not have an account yet?</Text>
+        <TouchableOpacity onPress={() => Navigation.navigate('Registration')}>
+          <Text style={styles.link}> Create!</Text>
+        </TouchableOpacity>
+      </View>
+    </Background>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 100,
-  },
-  textInput: {
-    paddingTop: 20,
-    paddingBottom: 10,
-    width: 400,
-    fontSize: 20,
-    borderBottomWidth: 10,
-    borderBottomColor: '#000',
+  input: {
     marginBottom: 10,
-    textAlign: 'center',
+    width: '100%', // Set width to 100% to expand across the screen
+    paddingHorizontal: 20, // Add horizontal padding for better appearance
+    backgroundColor: 'white', // Optional: Adjust background color as needed
+    borderRadius: 8, // Optional: Add border radius for rounded corners
+    height: 50, // Optional: Adjust height as needed
+  },
+  emailInput: {
+    // Additional styles specific to email input if needed
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: theme.colors.placeholder,
+    marginBottom: 10,
+  },
+  iconButton: {
+    position: 'absolute',
+    right: 0,
+    height: '100%', // Ensure icon button covers the entire height of the password input
+    justifyContent: 'center', // Center the icon vertically
+    paddingHorizontal: 10, // Add padding to the icon button for touchable area
+  },
+  icon: {
+    fontSize: 20,
+    color: theme.colors.primary,
   },
   button: {
-    marginTop: 50,
-    height: 70,
-    width: 250,
-    backgroundColor: "#026efd",
-    alignItems: 'center',
+    marginTop: 20,
+  },
+  row: {
+    flexDirection: 'row',
+    marginTop: 4,
     justifyContent: 'center',
-    borderRadius: 50
-  }
-})
+  },
+  link: {
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+  },
+});
+
+export default Login;

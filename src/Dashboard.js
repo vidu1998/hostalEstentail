@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Text, StyleSheet, SafeAreaView, TouchableOpacity, View, ActivityIndicator, ScrollView } from 'react-native';
+import { FlatList , View, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { Card, Title, Appbar, Text } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { firebase } from '../config';
 import { useNavigation } from '@react-navigation/native';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 const Dashboard = () => {
-  const Navigation = useNavigation();
-  const [name, setName] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const navigation = useNavigation(); // Initialize useNavigation hook
+  const [role, setRole] = useState(''); // State to hold user's role
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +27,8 @@ const Dashboard = () => {
           .get();
 
         if (snapshot.exists) {
-          setName(snapshot.data());
+          const userData = snapshot.data();
+          setRole(userData.role);  // Assuming role is a field in your user document
         } else {
           console.log('User does not exist');
         }
@@ -33,139 +43,180 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  const renderButtons = () => {
+    switch (role) {
+      case 'admin':
+        return [
+           { id: 1, name: 'Role Update', onPress: () => navigation.navigate('RoleUpdate'),iconName: 'id-badge'},
+           { id: 1, name: 'Profile Update', onPress: () => navigation.navigate('ProfileUpdate'),iconName: 'user'},
+              { id: 2, name: 'Update Password', onPress: () => navigation.navigate('UpdatePassword'), iconName: 'key'},
+              { id: 3, name: 'Room Management', onPress: () => navigation.navigate('RoomManagement') ,iconName: 'building'},
+              { id: 4, name: 'Room Request Verify', onPress: () => navigation.navigate('VerifyRoomRequestScreen'),iconName: 'building'},
+              { id: 5, name: 'Attendance Marking', onPress: () => navigation.navigate('AttendanceScreen') ,iconName: 'calendar-check-o'},
+              { id: 6, name: 'My Rooms', onPress: () => navigation.navigate('MyRoomScreen')  ,iconName: 'user'},
+
+              { id: 7, name: 'All Attendance', onPress: () => navigation.navigate('ViewAttendanceScreen') ,iconName: 'calendar-check-o'},
+              { id: 8, name: 'Issue Solver', onPress: () => navigation.navigate('AllissueScreen') , iconName: 'exclamation-triangle'},
+        ];
+      case 'user':
+        return [
+         { id: 1, name: 'Update Password', onPress: () => navigation.navigate('UpdatePassword') ,iconName: 'kiey'},
+              { id: 2, name: 'Room Request', onPress: () => navigation.navigate('RoomRequestScreen') ,iconName: 'star'},
+              { id: 3, name: 'My Rooms', onPress: () => navigation.navigate('MyRoomScreen')  ,iconName: 'user'},
+              { id: 4, name: 'My Attendance', onPress: () => navigation.navigate('MyAttendanceScreen')  ,iconName: 'calendar-check-o'},
+              { id: 5, name: 'Issue Complain', onPress: () => navigation.navigate('IssueComplainScreen')  ,iconName: 'exclamation-triangle'},
+              { id: 6, name: 'My Issue List', onPress: () => navigation.navigate('IssueViewScreen')  ,iconName: 'exclamation-triangle'},
+        ];
+      case 'staff':
+        return [
+           { id: 1, name: 'Room Management', onPress: () => navigation.navigate('RoomManagement')  ,iconName: 'building'},
+              { id: 2, name: 'Update Password', onPress: () => navigation.navigate('UpdatePassword')  ,iconName: 'key'},
+              { id: 3, name: 'Room Request', onPress: () => navigation.navigate('RoomRequestScreen')  ,iconName: 'building'},
+              { id: 4, name: 'Room Request Verify', onPress: () => navigation.navigate('VerifyRoomRequestScreen')  ,iconName: 'building'},
+              { id: 5, name: 'My Rooms', onPress: () => navigation.navigate('MyRoomScreen')  ,iconName: 'building'},
+              { id: 6, name: 'Attendance Marking', onPress: () => navigation.navigate('AttendanceScreen')  ,iconName: 'calendar-check-o'},
+              { id: 7, name: 'All Attendance', onPress: () => navigation.navigate('ViewAttendanceScreen')  ,iconName: 'calendar-check-o'},
+              { id: 8, name: 'Issue Complain', onPress: () => navigation.navigate('IssueComplainScreen')  ,iconName: 'exclamation-triangle'},
+              { id: 9, name: 'Issue Solver', onPress: () => navigation.navigate('AllissueScreen') ,iconName: 'exclamation-triangle'},
+            ];
+        
+      default:
+        return [];
+    }
+  };
+  
+  
+
+
+  const formatTime = (time) => {
+    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }).toLowerCase();
+  };
+  if (loading) {
+    return <Text>Loading...</Text>;
+  }
+  const userRoleProducts = renderButtons();
   return (
-    <SafeAreaView style={styles.container}>
-    <ScrollView contentContainerStyle={styles.scrollViewContent}>
-    <View style={styles.content}>
-        {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <View style={styles.buttonsContainer}>
-          
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('RoleUpdate')}
-              style={[styles.button, { backgroundColor: '#03A9F4' }]}
-            >
-              <Icon name="settings" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Role Update</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('UpdatePassword')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Update Password</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('RoomManagement')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Room Management</Text>
-            </TouchableOpacity>
+    <>
+        <Appbar.Header>
+        <Appbar.Content title="Welcome" subtitle={`Hi, welcome! ${formatDate(currentTime)}`} />
+      </Appbar.Header>
 
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('RoomRequestScreen')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Room Request</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('VerifyRoomRequestScreen')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Room Request verify</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('MyRoomScreen')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>My Rooms</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('AttendanceScreen')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Attendance Marking</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('ViewAttendanceScreen')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>All Attendance</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => Navigation.navigate('MyAttendanceScreen')} 
-              style={[styles.button, { backgroundColor: '#026efd' }]}
-            >
-              <Icon name="lock-closed-outline" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>My Attendance</Text>
-            </TouchableOpacity>
-
-
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => { firebase.auth().signOut(); }}
-            >
-              <Icon name="log-out" size={30} color="#fff" style={styles.icon} />
-              <Text style={[styles.buttonText, { paddingLeft: 40 }]}>Sign out</Text>
-            </TouchableOpacity>
-
-          </View>
-         
-        )}
-         </View>
-      </ScrollView>
-    </SafeAreaView>
+      <View style={styles.clockContainer}>
+        <Clock />
+      </View>
+      <View style={styles.imageContainer}>
+        <Image source={require('./assets/hostalimg.png')} style={styles.image} />
+      </View>
+      <FlatList
+          data={userRoleProducts}
+          keyExtractor={(product) => product.id.toString()}
+          renderItem={({ item }) => <ProductCard product={item} />}
+          numColumns={2}
+        />
+    </>
   );
 };
 
-export default Dashboard;
+const Clock = () => {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (time) => {
+    return time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+
+  return <Text style={styles.clockText}>{formatTime(time)}</Text>;
+};
+
+const ProductCard = ({ product }) => {
+  return (
+    <TouchableOpacity onPress={product.onPress} style={styles.cardContainer}>
+      <Card style={styles.card}>
+        <Card.Content style={styles.cardContent}>
+          <View style={styles.upperRow}>
+            <View style={styles.iconContainer}>
+              <Icon name={product.iconName} size={20} style={styles.icon} />
+            </View>
+          </View>
+          <View style={styles.lowerRow}>
+            <Title style={styles.title}>{product.name}</Title>
+          </View>
+        </Card.Content>
+      </Card>
+    </TouchableOpacity>
+  );
+};
+const windowWidth = Dimensions.get('window').width;
+const cardWidth = (windowWidth - 40) / 2;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-  },
-  scrollViewContent: {
     flexGrow: 1,
+    paddingHorizontal: '10%',
+    paddingTop: 20,
   },
-  content: {
-    flex: 1,
-    paddingVertical: 20,
-  },
-  buttonsContainer: {
+  clockContainer: {
+    backgroundColor: 'blue',
     alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 20,
+    paddingVertical: 10,
   },
-  button: {
-    flexDirection: 'row',
+  clockText: {
+    fontSize: 20,
+    color: 'white',
+  },
+  imageContainer: {
     alignItems: 'center',
-    height: 70,
-    width: '90%',
+    marginVertical: 20,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+  card: {
+    width: cardWidth,
     marginBottom: 20,
-    backgroundColor: '#026efd',
-    justifyContent: 'center',
-    borderRadius: 50,
-    paddingHorizontal: 50,
-    alignSelf: 'center',
-    // to accommodate absolute positioning of icon
+    elevation: 4,
   },
-  buttonText: {
-    fontSize: 22,
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    width: cardWidth,
+  },
+  cardContent: {
+    flexDirection: 'column', // Change to column layout
+    alignItems: 'center', // Center items vertically
+    padding: 10, // Add padding
+  },
+
+  upperRow: {
+    flex: 1, // Occupy the upper row
+    justifyContent: 'center', // Center items horizontally
+  },
+  lowerRow: {
+    flex: 1, // Occupy the lower row
+    justifyContent: 'center', // Center items horizontally
+  },
+  iconContainer: {
+    marginRight: 10,
+  },
+  title: {
+    fontSize: 16,
+  },
+  roleText: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#fff',
-  },
-  icon: {
-    position: 'absolute',
-    left: 20,
+    marginBottom: 10,
   },
 });
+export default Dashboard;

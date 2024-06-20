@@ -16,6 +16,11 @@ import MyRoomScreen from "./src/MyRoomScreen";
 import AttendanceScreen from "./src/AttendanceScreen";
 import ViewAttendanceScreen from "./src/ViewAttendanceScreen";
 import MyAttendanceScreen from "./src/MyAttendanceScreen";
+import IssueComplainScreen from "./src/IssueComplainScreen";
+import IssueViewScreen from "./src/IssueViewScreen";
+import AllIssuesScreen from "./src/AllIssuesScreen";
+import StartScreen from "./src/StartScreen";
+import ProfileUpdate from "./src/ProfileUpdate";
 
 
 const Stack = createStackNavigator();
@@ -46,36 +51,23 @@ function App() {
   if (!user) {
     return (
       <Stack.Navigator>
+          <Stack.Screen 
+          name="StartScreen"
+          component={StartScreen}  
+          options={{headerShown: false   }}
+            // This line hides the header
+/>
+        
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{
-            headerTitle: () => <Header name="Bug Ninza" />,
-            headerStyle: {
-              height: 150,
-              borderBottomLeftRadius: 50,
-              borderBottomRightRadius: 50,
-              backgroundColor: '#00e440',
-              shadowColor: '#000',
-              elevation: 25,
-            }
-          }}
+          options={{headerShown: false   }}
         ></Stack.Screen>
 
         <Stack.Screen
           name="Registration"
           component={Registration}
-          options={{
-            headerTitle: () => <Header name="Bug Ninza" />,
-            headerStyle: {
-              height: 150,
-              borderBottomLeftRadius: 50,
-              borderBottomRightRadius: 50,
-              backgroundColor: '#00e440',
-              shadowColor: '#000',
-              elevation: 25,
-            }
-          }}
+          options={{headerShown: false   }}
         ></Stack.Screen>
       </Stack.Navigator>
     );
@@ -86,49 +78,26 @@ function App() {
       key="Dashboard"
       name="Dashboard"
       component={Dashboard}
-      options={{
-        headerTitle: () => <Header name="Dashboard" />,
-        headerStyle: {
-          height: 150,
-          borderBottomLeftRadius: 50,
-          borderBottomRightRadius: 50,
-          backgroundColor: '#00e440',
-          shadowColor: '#000',
-          elevation: 25,
-        }
-      }}
+      options={{headerShown: false   }}
+
     />,
     <Stack.Screen
       key="RoleUpdate"
       name="RoleUpdate"
       component={RoleUpdate}
-      options={{
-        headerTitle: () => <Header name="RoleUpdate" />,
-        headerStyle: {
-          height: 150,
-          borderBottomLeftRadius: 50,
-          borderBottomRightRadius: 50,
-          backgroundColor: '#00e440',
-          shadowColor: '#000',
-          elevation: 25,
-        }
-      }}
+      options={{headerShown: false   }}
     />,
+    <Stack.Screen
+    key="ProfileUpdate"
+    name="ProfileUpdate"
+    component={ProfileUpdate}
+    options={{headerShown: false   }}
+  />,
     <Stack.Screen
       key="UpdatePassword"
       name="UpdatePassword"
       component={UpdatePassword}
-      options={{
-        headerTitle: () => <Header name="update password" />,
-        headerStyle: {
-          height: 150,
-          borderBottomLeftRadius: 50,
-          borderBottomRightRadius: 50,
-          backgroundColor: '#00e440',
-          shadowColor: '#000',
-          elevation: 25,
-        }
-      }}
+      options={{headerShown: false   }}
     />,
 
     <Stack.Screen
@@ -236,6 +205,56 @@ name="MyAttendanceScreen"
 component={MyAttendanceScreen}
 options={{
   headerTitle: () => <Header name="My Attendance" />,
+  headerStyle: {
+    height: 150,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    backgroundColor: '#00e440',
+    shadowColor: '#000',
+    elevation: 25,
+  }
+}}
+/>,
+
+
+<Stack.Screen
+key="IssueComplainScreen"
+name="IssueComplainScreen"
+component={IssueComplainScreen}
+options={{
+  headerTitle: () => <Header name="Issue Complain" />,
+  headerStyle: {
+    height: 150,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    backgroundColor: '#00e440',
+    shadowColor: '#000',
+    elevation: 25,
+  }
+}}
+/>,
+<Stack.Screen
+key="IssueViewScreen"
+name="IssueViewScreen"
+component={IssueViewScreen}
+options={{
+  headerTitle: () => <Header name=" my Issue List" />,
+  headerStyle: {
+    height: 150,
+    borderBottomLeftRadius: 50,
+    borderBottomRightRadius: 50,
+    backgroundColor: '#00e440',
+    shadowColor: '#000',
+    elevation: 25,
+  }
+}}
+/>,
+<Stack.Screen
+key="AllissueScreen"
+name="AllissueScreen"
+component={AllIssuesScreen}
+options={{
+  headerTitle: () => <Header name="Issue solve" />,
   headerStyle: {
     height: 150,
     borderBottomLeftRadius: 50,
