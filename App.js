@@ -104,17 +104,7 @@ function App() {
     key="RoomManagement"
     name="RoomManagement"
     component={RoomManagement}
-    options={{
-      headerTitle: () => <Header name="Room Management" />,
-      headerStyle: {
-        height: 150,
-        borderBottomLeftRadius: 50,
-        borderBottomRightRadius: 50,
-        backgroundColor: '#00e440',
-        shadowColor: '#000',
-        elevation: 25,
-      }
-    }}
+    options={{headerShown: false   }}
   />,
 
 
@@ -138,17 +128,7 @@ function App() {
   key="VerifyRoomRequestScreen"
   name="VerifyRoomRequestScreen"
   component={VerifyRoomRequestScreen}
-  options={{
-    headerTitle: () => <Header name="Room Request Verify" />,
-    headerStyle: {
-      height: 150,
-      borderBottomLeftRadius: 50,
-      borderBottomRightRadius: 50,
-      backgroundColor: '#00e440',
-      shadowColor: '#000',
-      elevation: 25,
-    }
-  }}
+  options={{headerShown: false   }}
 />,
   <Stack.Screen
   key="MyRoomScreen"

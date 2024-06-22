@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet} from 'react-native';
+
+
+
 import { Text, TextInput, Button } from 'react-native-paper'; // Assuming Text and Button are from react-native-paper
 import Background from './components/Background';
 import Logo from './components/Logo';
@@ -29,6 +32,9 @@ const Login = () => {
       const userData = userDoc.data();
       
       if (userData) {
+        // Store user data in AsyncStorage
+      // Assuming 'name' is a field in your user data
+        
         // Redirect based on user role
         
       } else {
